@@ -8,9 +8,9 @@ typedef void (*stack_freeITEM)(void*);
 
 struct Stack
 {
-    struct Node
+    struct StackNode
     {
-        struct Node *next;
+        struct StackNode *next;
         void *info;
     } *first;
     stack_freeITEM free;
@@ -31,21 +31,21 @@ STACK_ITEM  stack_top(const STACK);
 /*
  * errors codes
  */
-#define NULL_POINTER    0
-#define NOT_EMPTY       0
-#define EMPTY           1
-#define NO_ERROR        2
-#define MALLOC_ERROR    3
+#define STACK_NULL_POINTER    0
+#define STACK_NOT_EMPTY       0
+#define STACK_EMPTY           1
+#define STACK_NO_ERROR        2
+#define STACK_MALLOC_ERROR    3
 
-#define STACK_FOR_EACH(stack, func, ...)                \
-        do                                              \
-        {                                               \
-            while (stack_empty(stack) == NOT_EMPTY)     \
-            {                                           \
-                func(stack_top(stack), ##__VA_ARGS__);  \
-                stack_pop(stack);                       \
-            }                                           \
-        }                                               \
+#define STACK_FOR_EACH(stack, func, ...)                    \
+        do                                                  \
+        {                                                   \
+            while (stack_empty(stack) == STACK_NOT_EMPTY)   \
+            {                                               \
+                func(stack_top(stack), ##__VA_ARGS__);      \
+                stack_pop(stack);                           \
+            }                                               \
+        }                                                   \
         while (0)
 
 #endif
