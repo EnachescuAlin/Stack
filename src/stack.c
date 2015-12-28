@@ -1,7 +1,7 @@
 #include "stack.h"
 #include <string.h>
 
-CODE stack_delete(STACK *stack)
+STACK_CODE stack_delete(STACK *stack)
 {
     if (stack == NULL)
         return NULL_POINTER;
@@ -15,7 +15,7 @@ CODE stack_delete(STACK *stack)
     *stack = NULL;
 }
 
-STACK stack_init(FreeITEM freeItem)
+STACK stack_init(stack_freeITEM freeItem)
 {
     STACK stack = (STACK) malloc(sizeof(struct Stack));
     stack->first = NULL;
@@ -24,7 +24,7 @@ STACK stack_init(FreeITEM freeItem)
     return stack;
 }
 
-CODE stack_empty(const STACK stack)
+STACK_CODE stack_empty(const STACK stack)
 {
     if (stack == NULL)
         return NULL_POINTER;
@@ -35,7 +35,7 @@ CODE stack_empty(const STACK stack)
         return NOT_EMPTY;
 }
 
-CODE stack_push(STACK stack, ITEM item, size_t bytes)
+STACK_CODE stack_push(STACK stack, STACK_ITEM item, size_t bytes)
 {
     if (stack == NULL)
         return NULL_POINTER;
@@ -66,7 +66,7 @@ CODE stack_push(STACK stack, ITEM item, size_t bytes)
     return NO_ERROR;
 }
 
-CODE stack_pop(STACK stack)
+STACK_CODE stack_pop(STACK stack)
 {
     if (stack == NULL)
         return NULL_POINTER;
@@ -87,7 +87,7 @@ CODE stack_pop(STACK stack)
     return NO_ERROR;
 }
 
-ITEM stack_top(const STACK stack)
+STACK_ITEM stack_top(const STACK stack)
 {
     if (stack == NULL)
         return NULL;
@@ -98,7 +98,7 @@ ITEM stack_top(const STACK stack)
     return stack->first->info;
 }
 
-CODE stack_for_each(STACK stack, ProcessesITEM func)
+STACK_CODE stack_for_each(STACK stack, stack_processesITEM func)
 {
     if (stack == NULL)
         return NULL_POINTER;

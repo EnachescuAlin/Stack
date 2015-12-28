@@ -3,8 +3,8 @@
 
 #include <stdlib.h>
 
-typedef void (*ProcessesITEM)(void*);
-typedef void (*FreeITEM)(void*);
+typedef void (*stack_processesITEM)(void*);
+typedef void (*stack_freeITEM)(void*);
 
 struct Stack
 {
@@ -13,22 +13,20 @@ struct Stack
         struct Node *next;
         void *info;
     } *first;
-    FreeITEM free;
+    stack_freeITEM free;
 };
 
-#define STACK struct Stack*
-#define CODE int
-#define ITEM void*
+#define STACK       struct Stack*
+#define STACK_CODE  int
+#define STACK_ITEM  void*
 
-STACK stack_init(FreeITEM);
-
-CODE stack_pop(STACK);
-CODE stack_push(STACK, ITEM, size_t);
-CODE stack_empty(const STACK);
-CODE stack_delete(STACK*);
-CODE stack_for_each(STACK, ProcessesITEM);
-
-ITEM stack_top(const STACK);
+STACK       stack_init(stack_freeITEM);
+STACK_CODE  stack_pop(STACK);
+STACK_CODE  stack_push(STACK, STACK_ITEM, size_t);
+STACK_CODE  stack_empty(const STACK);
+STACK_CODE  stack_delete(STACK*);
+STACK_CODE  stack_for_each(STACK, stack_processesITEM);
+STACK_ITEM  stack_top(const STACK);
 
 /*
  * errors codes
@@ -40,11 +38,15 @@ ITEM stack_top(const STACK);
 #define MALLOC_ERROR    3
 
 #define STACK_FOR_EACH(stack, func, ...)                \
+        do                                              \
+        {                                               \
             while (stack_empty(stack) == NOT_EMPTY)     \
             {                                           \
                 func(stack_top(stack), ##__VA_ARGS__);  \
                 stack_pop(stack);                       \
-            }
+            }                                           \
+        }                                               \
+        while (0)
 
 #endif
 
