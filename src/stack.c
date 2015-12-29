@@ -17,7 +17,7 @@ STACK_CODE stack_delete(STACK *stack)
     *stack = NULL;
 }
 
-STACK stack_init(stack_freeITEM freeItem, stack_copyITEM copyItem)
+STACK stack_init(stack_freeItemFn freeItem, stack_copyItemFn copyItem)
 {
     STACK stack = (STACK) malloc(sizeof(struct Stack));
     stack->first = NULL;
@@ -88,7 +88,7 @@ STACK_ITEM stack_top(const STACK stack)
     return stack->first->info;
 }
 
-STACK_CODE stack_for_each(STACK stack, stack_processesITEM func)
+STACK_CODE stack_for_each(STACK stack, stack_processesItemFn func)
 {
     if (stack == NULL)
         return STACK_NULL_POINTER;
