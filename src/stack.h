@@ -1,10 +1,9 @@
 #ifndef PHILIB_STACK_H
 #define PHILIB_STACK_H
 
-#include <stdlib.h>
-
 typedef void (*stack_processesITEM)(void*);
 typedef void (*stack_freeITEM)(void*);
+typedef void* (*stack_copyITEM)(const void*);
 
 struct Stack
 {
@@ -14,15 +13,17 @@ struct Stack
         void *info;
     } *first;
     stack_freeITEM free;
+    stack_copyITEM copy;
 };
 
 #define STACK       struct Stack*
 #define STACK_CODE  int
 #define STACK_ITEM  void*
 
-STACK       stack_init(stack_freeITEM);
+STACK       stack_init(stack_freeITEM, stack_copyITEM);
+STACK       stack_copy(const STACK);
 STACK_CODE  stack_pop(STACK);
-STACK_CODE  stack_push(STACK, STACK_ITEM, size_t);
+STACK_CODE  stack_push(STACK, STACK_ITEM);
 STACK_CODE  stack_empty(const STACK);
 STACK_CODE  stack_delete(STACK*);
 STACK_CODE  stack_for_each(STACK, stack_processesITEM);
