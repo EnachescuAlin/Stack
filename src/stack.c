@@ -62,7 +62,7 @@ STACK_CODE stack_pop(STACK stack)
         return STACK_NULL_POINTER;
 
     if (stack->first == NULL)
-        return STACK_NULL_POINTER;
+        return STACK_EMPTY;
 
     struct StackNode *node = stack->first;
     stack->first = stack->first->next;
@@ -88,16 +88,38 @@ STACK_ITEM stack_top(const STACK stack)
     return stack->first->info;
 }
 
-STACK_CODE stack_for_each(STACK stack, stack_processesItemFn func)
+STACK_CODE stack_for_each(STACK stack, STACK_PROCESSING_TYPE type,
+                          stack_processesItemFn func)
 {
     if (stack == NULL)
         return STACK_NULL_POINTER;
 
-    while (stack_empty(stack) == STACK_NOT_EMPTY)
+    if (type != TOP_POP_PROCESSING && type != TOP_PROCESSING_POP)
+        return STACK_INVALID_PROCESSING_TYPE;
+
+    if (type == TOP_PROCESSING_POP)
+        while (stack_empty(stack) == STACK_NOT_EMPTY)
+        {
+            func(stack_top(stack));
+            stack_pop(stack);
+        }
+    else
     {
-        func(stack_top(stack));
-        stack_pop(stack);
+        stack_freeItemFn fn = stack->free;
+        stack->free = NULL;
+
+        while (stack_empty(stack) == STACK_NOT_EMPTY)
+        {
+            void *item = stack_top(stack);
+            stack_pop(stack);
+            func(item);
+            fn(item);
+        }
+
+        stack->free = fn;
     }
+
+    return STACK_NO_ERROR;
 }
 
 STACK stack_copy(const STACK stack)
