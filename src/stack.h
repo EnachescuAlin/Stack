@@ -24,6 +24,10 @@ struct Stack
     stack_copyItemFn copy;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 STACK       stack_init(stack_freeItemFn, stack_copyItemFn);
 STACK       stack_copy(const STACK);
 STACK_CODE  stack_pop(STACK);
@@ -33,6 +37,10 @@ STACK_CODE  stack_delete(STACK*);
 STACK_CODE  stack_for_each(STACK, STACK_PROCESSING_TYPE, stack_processesItemFn);
 STACK_CODE  stack_reverse(STACK);
 STACK_ITEM  stack_top(const STACK);
+
+#ifdef __cplusplus
+}
+#endif
 
 /*
  * errors codes
