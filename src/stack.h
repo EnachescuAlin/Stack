@@ -31,6 +31,7 @@ STACK_CODE  stack_push(STACK, STACK_ITEM);
 STACK_CODE  stack_empty(const STACK);
 STACK_CODE  stack_delete(STACK*);
 STACK_CODE  stack_for_each(STACK, STACK_PROCESSING_TYPE, stack_processesItemFn);
+STACK_CODE  stack_reverse(STACK);
 STACK_ITEM  stack_top(const STACK);
 
 /*
@@ -61,7 +62,8 @@ STACK_ITEM  stack_top(const STACK);
                     void *item = stack_top(stack);              \
                     stack_pop(stack);                           \
                     func(item, ##__VA_ARGS__);                  \
-                    fn(item);                                   \
+                    if (fn)                                     \
+                        fn(item);                               \
                 }                                               \
                 stack->free = fn;                               \
             }                                                   \

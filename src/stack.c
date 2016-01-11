@@ -113,7 +113,9 @@ STACK_CODE stack_for_each(STACK stack, STACK_PROCESSING_TYPE type,
             void *item = stack_top(stack);
             stack_pop(stack);
             func(item);
-            fn(item);
+
+            if (fn)
+                fn(item);
         }
 
         stack->free = fn;
@@ -152,5 +154,30 @@ STACK stack_copy(const STACK stack)
     }
 
     return newStack;
+}
+
+STACK_CODE stack_reverse(STACK stack)
+{
+    if (stack == NULL)
+        return STACK_NULL_POINTER;
+    if (stack->first == NULL)
+        return STACK_EMPTY;
+    if (stack->first->next == NULL)
+        return STACK_NO_ERROR;
+
+    struct StackNode *sn = stack->first;
+    struct StackNode *newFirst = NULL;
+    struct StackNode *copy;
+    while (sn)
+    {
+        copy = sn;
+        sn = sn->next;
+        copy->next = newFirst;
+        newFirst = copy;
+    }
+
+    stack->first = newFirst;
+
+    return STACK_NO_ERROR;
 }
 
