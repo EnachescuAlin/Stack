@@ -19,6 +19,9 @@ STACK_CODE stack_delete(STACK *stack)
 STACK stack_init(stack_freeItemFn freeItem, stack_copyItemFn copyItem)
 {
     STACK stack = (STACK) malloc(sizeof(struct Stack));
+    if (stack == NULL)
+        return NULL;
+
     stack->first = NULL;
     stack->free = freeItem;
     stack->copy = copyItem;
