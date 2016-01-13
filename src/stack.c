@@ -14,6 +14,8 @@ STACK_CODE stack_delete(STACK *stack)
 
     free(*stack);
     *stack = NULL;
+
+    return STACK_NO_ERROR;
 }
 
 STACK stack_init(stack_freeItemFn freeItem, stack_copyItemFn copyItem)
