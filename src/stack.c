@@ -136,6 +136,9 @@ STACK stack_copy(const STACK stack)
         return NULL;
 
     STACK newStack = (STACK) malloc(sizeof(struct Stack));
+    if (newStack == NULL)
+        return NULL;
+
     newStack->first = NULL;
     newStack->free = stack->free;
     newStack->copy = stack->copy;
@@ -143,6 +146,12 @@ STACK stack_copy(const STACK stack)
     if (stack->first)
     {
         newStack->first = (struct StackNode*) malloc(sizeof(struct StackNode));
+        if (newStack->first == NULL)
+        {
+            stack_delete(&newStack);
+            return NULL;
+        }
+
         newStack->first->next = NULL;
         newStack->first->info = stack->copy(stack->first->info);
     }
@@ -153,6 +162,12 @@ STACK stack_copy(const STACK stack)
     while (sn)
     {
         nsn->next = (struct StackNode*) malloc(sizeof(struct StackNode));
+        if (nsn->next == NULL)
+        {
+            stack_delete(&newStack);
+            return NULL;
+        }
+
         nsn->next->info = stack->copy(sn->info);
         nsn->next->next = NULL;
         nsn = nsn->next;
