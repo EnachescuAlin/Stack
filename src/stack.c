@@ -97,7 +97,8 @@ STACK_CODE stack_for_each(STACK stack, STACK_PROCESSING_TYPE type,
 {
     if (stack == NULL)
         return STACK_NULL_POINTER;
-
+    if (func == NULL)
+        return STACK_NULL_POINTER;
     if (type != TOP_POP_PROCESSING && type != TOP_PROCESSING_POP)
         return STACK_INVALID_PROCESSING_TYPE;
 
