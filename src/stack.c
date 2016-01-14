@@ -130,6 +130,8 @@ STACK_CODE stack_for_each(STACK stack, STACK_PROCESSING_TYPE type,
 
 STACK stack_copy(const STACK stack)
 {
+    if (stack == NULL)
+        return NULL;
     if (stack->copy == NULL)
         return NULL;
 
