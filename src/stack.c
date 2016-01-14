@@ -155,6 +155,8 @@ STACK stack_copy(const STACK stack)
         newStack->first->next = NULL;
         newStack->first->info = stack->copy(stack->first->info);
     }
+    else
+        return newStack;
 
     struct StackNode *sn  = stack->first->next;
     struct StackNode *nsn = newStack->first;
