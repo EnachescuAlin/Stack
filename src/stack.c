@@ -99,10 +99,10 @@ STACK_CODE stack_for_each(STACK stack, STACK_PROCESSING_TYPE type,
         return STACK_NULL_POINTER;
     if (func == NULL)
         return STACK_NULL_POINTER;
-    if (type != TOP_POP_PROCESSING && type != TOP_PROCESSING_POP)
+    if (type != STACK_TOP_POP_PROCESSING && type != STACK_TOP_PROCESSING_POP)
         return STACK_INVALID_PROCESSING_TYPE;
 
-    if (type == TOP_PROCESSING_POP)
+    if (type == STACK_TOP_PROCESSING_POP)
         while (stack_empty(stack) == STACK_NOT_EMPTY)
         {
             func(stack_top(stack));

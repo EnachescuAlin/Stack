@@ -1,8 +1,8 @@
 #ifndef PHILIB_STACK_H
 #define PHILIB_STACK_H
 
-#define TOP_POP_PROCESSING 1
-#define TOP_PROCESSING_POP 2
+#define STACK_TOP_POP_PROCESSING 1
+#define STACK_TOP_PROCESSING_POP 2
 
 typedef struct Stack*   STACK;
 typedef int             STACK_CODE;
@@ -55,7 +55,7 @@ STACK_ITEM  stack_top(const STACK);
 #define STACK_FOR_EACH(stack, type, func, ...)                  \
         do                                                      \
         {                                                       \
-            if (type == TOP_PROCESSING_POP)                     \
+            if (type == STACK_TOP_PROCESSING_POP)               \
                 while (stack_empty(stack) == STACK_NOT_EMPTY)   \
                 {                                               \
                     func(stack_top(stack), ##__VA_ARGS__);      \
