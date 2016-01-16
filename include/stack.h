@@ -61,7 +61,7 @@ STACK_ITEM  stack_top(const STACK);
                     func(stack_top(stack), ##__VA_ARGS__);      \
                     stack_pop(stack);                           \
                 }                                               \
-            else                                                \
+            if (type == STACK_TOP_POP_PROCESSING)               \
             {                                                   \
                 stack_freeItemFn fn = stack->free;              \
                 stack->free = NULL;                             \
