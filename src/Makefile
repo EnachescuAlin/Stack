@@ -15,3 +15,4 @@ libstack.la:
 
 clean:
 	rm ../bin/stack.o ../bin/libstack.a ../bin/libstack.la
+	rm -r ../bin
