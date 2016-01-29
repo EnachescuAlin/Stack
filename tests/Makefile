@@ -1,6 +1,6 @@
 CFLAGS  = -std=c99 -Wall -o
 INCLUDE = -I../include
-LIBS    = ../bin/libstack.a
+LIBS    = ../bin/libstack.a -lcut
 
 all: test
 
