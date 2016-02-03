@@ -182,24 +182,109 @@ void processing(STACK_ITEM item)
     array[i++] = ((struct Number*)item)->x;
 }
 
+int _array[10] = {0};
+void _processing(STACK_ITEM item)
+{
+    static int i = 0;
+    _array[i++] = ((struct Number*)item)->x;
+}
+
 CUT_DEFINE_TEST(test_stack_for_each)
 {
     STACK stack = stack_init(numberDelete, numberCopy);
 
-    stack_push(stack, numberCreate(1));
-    stack_push(stack, numberCreate(2));
-    stack_push(stack, numberCreate(3));
+    stack_push(stack, numberCreate(17));
+    stack_push(stack, numberCreate(25));
+    stack_push(stack, numberCreate(93));
 
+    // Special cases
     CUT_CHECK(stack_for_each(NULL, STACK_TOP_POP_PROCESSING, processing) == STACK_NULL_POINTER);
     CUT_CHECK(stack_for_each(stack, STACK_TOP_POP_PROCESSING, NULL) == STACK_NULL_POINTER);
+
     CUT_CHECK(stack_for_each(stack, 123, processing) == STACK_INVALID_PROCESSING_TYPE);
+    CUT_CHECK(stack_for_each(NULL, 346, NULL) != STACK_NO_ERROR);
+
+    CUT_CHECK(stack_for_each(NULL, STACK_TOP_PROCESSING_POP, processing) == STACK_NULL_POINTER);
+    CUT_CHECK(stack_for_each(stack, STACK_TOP_PROCESSING_POP, NULL) == STACK_NULL_POINTER);
+
+    // Normal case - STACK_TOP_POP_PROCESSING
     CUT_CHECK(stack_for_each(stack, STACK_TOP_POP_PROCESSING, processing) == STACK_NO_ERROR);
     CUT_CHECK(stack_empty(stack) == STACK_EMPTY);
 
-    CUT_CHECK(array[0] == 3);
-    CUT_CHECK(array[1] == 2);
-    CUT_CHECK(array[2] == 1);
+    CUT_CHECK(array[0] == 93);
+    CUT_CHECK(array[1] == 25);
+    CUT_CHECK(array[2] == 17);
     CUT_CHECK(array[3] == 0);
+
+    stack_push(stack, numberCreate(167));
+    stack_push(stack, numberCreate(326));
+    stack_push(stack, numberCreate(795));
+
+    // Normal case - STACK_TOP_PROCESSING_POP;
+    CUT_CHECK(stack_for_each(stack, STACK_TOP_PROCESSING_POP, _processing) == STACK_NO_ERROR);
+    CUT_CHECK(stack_empty(stack) == STACK_EMPTY);
+
+    CUT_CHECK(_array[0] == 795);
+    CUT_CHECK(_array[1] == 326);
+    CUT_CHECK(_array[2] == 167);
+    CUT_CHECK(_array[3] == 0);
+
+    stack_delete(&stack);
+}
+
+//STACK_TOP_POP_PROCESSING
+int ARRAY[10] = {0};
+void PROCESSING(STACK_ITEM item, STACK stack, int y)
+{
+    static int i = 0;
+    if (((struct Number*)item)->x == 133 && i == 1)
+        stack_push(stack, numberCreate(y));
+
+    ARRAY[i++] = ((struct Number*)item)->x;
+}
+
+//STACK_TOP_PROCESSING_POP
+int _ARRAY[10] = {0};
+void _PROCESSING(STACK_ITEM item, STACK stack)
+{
+    static int i = 0;
+    if (((struct Number*)item)->x == 173 && i == 1)
+        stack_push(stack, numberCreate(5));
+
+    ARRAY[i++] = ((struct Number*)item)->x;
+}
+
+CUT_DEFINE_TEST(test_STACK_FOR_EACH)
+{
+    STACK stack = stack_init(numberDelete, numberCopy);
+
+    //STACK_TOP_POP_PROCESSING
+    stack_push(stack, numberCreate(167));
+    stack_push(stack, numberCreate(133));
+    stack_push(stack, numberCreate(795));
+
+    STACK_FOR_EACH(stack, STACK_TOP_POP_PROCESSING, PROCESSING, stack, 100);
+
+    CUT_CHECK(stack_empty(stack) == STACK_EMPTY);
+    CUT_CHECK(ARRAY[0] == 795);
+    CUT_CHECK(ARRAY[1] == 133);
+    CUT_CHECK(ARRAY[2] == 100);
+    CUT_CHECK(ARRAY[3] == 167);
+    CUT_CHECK(ARRAY[4] == 0);
+
+    //STACK_TOP_PROCESSING_POP
+    stack_push(stack, numberCreate(292));
+    stack_push(stack, numberCreate(173));
+    stack_push(stack, numberCreate(135));
+
+    STACK_FOR_EACH(stack, STACK_TOP_PROCESSING_POP, _PROCESSING, stack);
+
+    CUT_CHECK(stack_empty(stack) == STACK_EMPTY);
+    CUT_CHECK(ARRAY[0] == 135);
+    CUT_CHECK(ARRAY[1] == 173);
+    CUT_CHECK(ARRAY[2] == 173);
+    CUT_CHECK(ARRAY[3] == 292);
+    CUT_CHECK(ARRAY[4] == 0);
 
     stack_delete(&stack);
 }
@@ -214,5 +299,6 @@ CUT_DEFINE_MAIN
     CUT_CALL_TEST(test_stack_copy);
     CUT_CALL_TEST(test_stack_reverse);
     CUT_CALL_TEST(test_stack_for_each);
+    CUT_CALL_TEST(test_STACK_FOR_EACH);
 CUT_END_MAIN
 
